@@ -20,7 +20,7 @@ def get_format_date_py(format_value):
     format_parts = re.split(r'([-:/\s])', format_value)  # Menyertakan delimiter dalam hasil split
     
     # Konversi format yang dikenali
-    converted_parts = [f"%{format_mapping.get(part, part)}" if part.strip() and part not in "-: " else part for part in format_parts]
+    converted_parts = [f"%{format_mapping.get(part, part)}" if part.strip() and part not in "-:/ " else part for part in format_parts]
     
     # Gabungkan kembali
     return "".join(converted_parts)
