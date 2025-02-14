@@ -17,7 +17,7 @@ def get_format_date_py(format_value):
     }
     
     # Split berdasarkan "-", ":", atau spasi " "
-    format_parts = re.split(r'([-:\s])', format_value)  # Menyertakan delimiter dalam hasil split
+    format_parts = re.split(r'([-:/\s])', format_value)  # Menyertakan delimiter dalam hasil split
     
     # Konversi format yang dikenali
     converted_parts = [f"%{format_mapping.get(part, part)}" if part.strip() and part not in "-: " else part for part in format_parts]
