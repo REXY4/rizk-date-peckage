@@ -15,12 +15,15 @@ def get_format_date_py(format_value):
         "ss": "S",
         "a": "p"
     }
-    
-    # Split berdasarkan "-", ":", atau spasi " "
-    format_parts = re.split(r'([-:/\s])', format_value)  # Menyertakan delimiter dalam hasil split
-    
+
+    # Hilangkan tanda "-" hanya jika setelah "\"
+    format_value = re.sub(r"\\-", r"\\", format_value)
+
+    # Split berdasarkan pemisah (termasuk tanda backslash)
+    format_parts = re.split(r'([-:/\\\s])', format_value)
+
     # Konversi format yang dikenali
-    converted_parts = [f"%{format_mapping.get(part, part)}" if part.strip() and part not in "-:/ " else part for part in format_parts]
-    
-    # Gabungkan kembali
+    converted_parts = [f"%{format_mapping.get(part, part)}" if part.strip() and part not in "-:/\ " else part for part in format_parts]
+
+    # Gabungkan kembali hasilnya
     return "".join(converted_parts)
