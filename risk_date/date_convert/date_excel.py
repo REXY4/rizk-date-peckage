@@ -1,5 +1,15 @@
 from openpyxl import load_workbook
 from .format_date import get_format_date_py
+import re
+
+VALID_DATETIME_REGEX = re.compile(
+    r"(%[aAbBcdHIjmMpSUwWxXyYZ])"  # Format Python datetime yang valid
+)
+
+def is_valid_datetime_format(format_string):
+    # Jika ada format datetime yang valid di dalam string, kembalikan True
+    return bool(VALID_DATETIME_REGEX.search(format_string))
+
 
 def extract_excel_dates(file_path):
     wb = load_workbook(file_path, data_only=False)  
@@ -8,7 +18,8 @@ def extract_excel_dates(file_path):
     # get headers
     headers = {cell.column: cell.value for cell in ws[1]}  
     result = []
-    for row in ws.iter_rows(min_row=2): 
+    print(ws.iter_rows(min_row=2))
+    for row in ws.iter_rows(min_row=2,max_row=5): 
         for cell in row:
             col_index = cell.column  
             if col_index not in checked_columns and cell.is_date:  
@@ -27,6 +38,15 @@ def extract_excel_dates(file_path):
 
 def extract_excel_date_with_pandas(file_path, df):
     extrac_date = extract_excel_dates(file_path)
-    for date in extrac_date:
-        df[date["header"]] = df[date["header"]].dt.strftime(date["format"])
-    return df
+    try:
+        for date in extrac_date:
+            df[date["header"]] = df[date["header"]].dt.strftime(date["format"])
+        return {
+            "clean" : False,
+            'format' : extrac_date
+            }     
+    except Exception as e:
+        return {
+                "clean" : False,
+                "format" : extrac_date
+            }    

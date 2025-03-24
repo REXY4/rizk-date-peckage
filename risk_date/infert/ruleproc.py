@@ -176,7 +176,7 @@ class Sequence(ConditionClause):
                     return index - seq_pos + 1
             else:  # exited sequence
                 seq_pos = 0
-        raise LookupError('Failed to find sequence in elem_list')
+        return 0
 
 
 class Swap(ActionClause):
